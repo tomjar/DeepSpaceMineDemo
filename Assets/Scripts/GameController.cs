@@ -9,7 +9,8 @@ public class GameController : MonoBehaviour
 	public float spawnWait;
 	public float startWait;
 	public float waveWait;
-	
+	private int random;
+
 	void Start ()
 	{
 		StartCoroutine (SpawnWaves ());
@@ -17,6 +18,7 @@ public class GameController : MonoBehaviour
 	
 	IEnumerator SpawnWaves ()
 	{
+		random = 0;
 		yield return new WaitForSeconds (startWait);
 		while (true)
 		{
@@ -75,6 +77,7 @@ public class GameController : MonoBehaviour
 						random = 0;
 						break;
 					}
+				}
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
 				yield return new WaitForSeconds (spawnWait);
