@@ -14,6 +14,6 @@ public class UserInput : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			Application.Quit ();
 		}
-		
+
 	}
 }
