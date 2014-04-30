@@ -36,13 +36,7 @@ public class PlayerControler : MonoBehaviour
 
 	void Update ()
 	{
-		if (Input.GetButton("Fire1") && Time.time > nextFire)
-		{
-			nextFire = Time.time + fireRate;
-			//GameObject clone = Instantiate(projectile, transform.position, transform.rotation) as GameObject;
-			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-			audio.Play ();
-		}
+
 
 		// Stuff having to do with mouselook
 		if (axes == RotationAxes.MouseXAndY)
@@ -67,18 +61,27 @@ public class PlayerControler : MonoBehaviour
 	
 	void FixedUpdate ()
 	{
+		if (Input.GetButton("Fire1") && Time.time > nextFire)
+		{
+			nextFire = Time.time + fireRate;
+			//GameObject clone = Instantiate(projectile, transform.position, transform.rotation) as GameObject;
+			Instantiate(shot, shotSpawn.position, rigidbody.rotation);
+			audio.Play ();
+		}
+
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
-		
-		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
-		rigidbody.velocity = movement * speed;
-		
-		rigidbody.position = new Vector3 
+
+		// Moves the ship according to its orientation when appropriate keys are pressed
+		transform.Translate (moveHorizontal/50 * speed, 0, moveVertical/50 * speed, Space.Self);
+
+		// Positional clamping is removed; player should be able to move anywhere
+		/*rigidbody.position = new Vector3 
 			(
 				Mathf.Clamp (rigidbody.position.x, boundary.xMin, boundary.xMax), 
 				0.0f, 
 				Mathf.Clamp (rigidbody.position.z, boundary.zMin, boundary.zMax)
-				);
+				);*/
 		
 		//rigidbody.rotation = Quaternion.Euler (0.0f, 0.0f, rigidbody.velocity.x * -tilt);
 	}
