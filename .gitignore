@@ -1,14 +1,14 @@
 #############
 ## Unity
 #############
-Library/
-Temp/
-Obj/
-*.csproj
-*.unityproj
-*.sln
-*.user
-*.userprefs
-*.DS_store
-*.exe
-*.meta
+- Library/
+- Temp/
+- Obj/
+- *.csproj
+- *.unityproj
+- *.sln
+- *.user
+- *.userprefs
+- *.DS_store
+- *.exe
+- *.meta
