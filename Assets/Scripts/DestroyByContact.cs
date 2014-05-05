@@ -9,7 +9,7 @@ public class DestroyByContact : MonoBehaviour
 	void OnTriggerEnter(Collider other) 
 	{
 		//you hit the asteroid!
-		if (other.tag == "Boundary")
+		if (other.tag == "Boundary" || other.tag == "Spawner")
 		{
 			return;
 		}

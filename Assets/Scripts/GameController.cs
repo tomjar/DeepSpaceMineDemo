@@ -9,7 +9,8 @@ public class GameController : MonoBehaviour
 	public float spawnWait;
 	public float startWait;
 	public float waveWait;
-	private int random;
+	public float innersphere;
+	public float outersphere;
 
 	void Start ()
 	{
@@ -18,7 +19,6 @@ public class GameController : MonoBehaviour
 	
 	IEnumerator SpawnWaves ()
 	{
-		random = 0;
 		yield return new WaitForSeconds (startWait);
 		while (true)
 		{
@@ -26,10 +26,8 @@ public class GameController : MonoBehaviour
 			{
 				Vector3 spawnPosition;
 
-
-
-				spawnPosition = Random.onUnitSphere * Random.Range(20, 27);
-
+				spawnPosition = Random.onUnitSphere * Random.Range(innersphere, outersphere);
+				spawnPosition += transform.position; // Makes the spawn locations always center on this game object (and thus, the player)
 
 				Quaternion spawnRotation = Quaternion.identity;
 				Instantiate (hazard, spawnPosition, spawnRotation);
