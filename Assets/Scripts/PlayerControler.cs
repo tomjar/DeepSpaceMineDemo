@@ -18,7 +18,7 @@ public class PlayerControler : MonoBehaviour
 	public float fireRate;
 	
 	private float nextFire;
-
+	
 	// Stuff having to do with mouselook
 	public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
 	public RotationAxes axes = RotationAxes.MouseXAndY;
@@ -33,18 +33,41 @@ public class PlayerControler : MonoBehaviour
 	
 	float rotationY = 0F;
 	// End stuff having to do with mouselook
-
+	
+	//Ship posture
+	public float lr_Rotate_MaxAngle = -90.0f;
+	public float lr_m_Angle = 0.0f;
+	public float m_SmoothValue = 3.0f;
+	
+	void Awake()
+	{
+		lr_m_Angle = transform.rotation.eulerAngles.z;
+		//ht_m_Angle = transform.rotation.eulerAngles.x;
+		lr_Rotate_MaxAngle += lr_m_Angle;
+		//ht_Rotate_MaxAngle += ht_m_Angle;
+	}
+	
 	void Update ()
 	{
-
-
+		
 		// Stuff having to do with mouselook
 		if (axes == RotationAxes.MouseXAndY)
 		{
-			float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+			//ship posture adjust
+			float lr_Input = Input.GetAxis("Horizontal");
+			lr_m_Angle = Mathf.Lerp(lr_m_Angle, lr_Rotate_MaxAngle * lr_Input, Time.deltaTime * m_SmoothValue);
+			Vector3 euler = transform.rotation.eulerAngles;
+			//euler.z = lr_m_Angle;
+			//transform.localRotation = Quaternion.Euler(euler);
+			
+			//float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
+			float rotationX = transform.localEulerAngles.y + Input.GetAxis("Horizontal") * sensitivityX;
+			//rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
+			rotationY += Input.GetAxis("Vertical") * sensitivityY;
 			rotationY = Mathf.Clamp (rotationY, minimumY, maximumY);
-			transform.localEulerAngles = new Vector3(-rotationY, rotationX, 0);
+			transform.localEulerAngles = new Vector3(-rotationY, rotationX, lr_m_Angle);
+			
+			
 		}
 		else if (axes == RotationAxes.MouseX)
 		{
@@ -68,13 +91,14 @@ public class PlayerControler : MonoBehaviour
 			Instantiate(shot, shotSpawn.position, rigidbody.rotation);
 			audio.Play ();
 		}
-
-		float moveHorizontal = Input.GetAxis ("Horizontal");
-		float moveVertical = Input.GetAxis ("Vertical");
-
+		
+		float moveHorizontal = Input.GetAxis ("Speed");
+		//float moveVertical = Input.GetAxis ("Vertical");
+		
 		// Moves the ship according to its orientation when appropriate keys are pressed
-		transform.Translate (moveHorizontal/50 * speed, 0, moveVertical/50 * speed, Space.Self);
-
+		//transform.Translate (moveHorizontal/50 * speed, 0, moveVertical/50 * speed, Space.Self);
+		transform.Translate (0, 0, moveHorizontal/50 * speed, Space.Self);
+		
 		// Positional clamping is removed; player should be able to move anywhere
 		/*rigidbody.position = new Vector3 
 			(
